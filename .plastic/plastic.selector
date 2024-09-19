@@ -1,0 +1,4 @@
+repository "Metroidvania_v2@thaiqtdh1b@cloud"
+  path "/"
+    br "/main"
+    co "/main"
