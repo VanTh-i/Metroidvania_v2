@@ -9,7 +9,23 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float speed;
     private float xAxis;
+
+    [Header("Jump Mechanic")]
     [SerializeField] private float jumpForce;
+    [SerializeField] private float coyoteTime;
+    private float coyoteTimeCounter;
+    [SerializeField] private float jumpBufferTime;
+    private float jumpBufferCounter;
+    private bool doubleJump;
+
+    [Header("Player Dash")]
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashTime;
+    [SerializeField] private float dashCooldown;
+    private bool canDash = true;
+    private bool dashed;
+    private bool isDashing;
+
 
     [Header("Raycast check ground")]
     [SerializeField] private Transform groundCheckPoint;
@@ -25,8 +41,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
+        if (isDashing) return;
         Move();
         Jump();
+        StartDash();
     }
 
 
@@ -68,19 +86,71 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        //khi nha phim space player se roi xuong, tao cam giac jump tot hon
-        if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0)
+        /*CoyoteTimeCounter se bi tru lien tuc khi khong o tren mat dat, khi roi khoi mat
+        dat 0.2s, player van co the nhay. Tim hieu them ve coyoteTime de biet chi tiet.*/
+        if (IsGrounded())
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0);
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
         }
 
         //jump
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            coyoteTimeCounter = 0f;
+        }
+
+        //khi nha phim space player se roi xuong, tao cam giac jump tot hon
+        if (Input.GetKeyUp(KeyCode.Space) && rb.velocity.y > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.1f);
+            coyoteTimeCounter = 0f;
         }
 
         Animation.JumpAnimation(!IsGrounded() && rb.velocity.y > 0);
         Animation.FallAnimation(!IsGrounded() && rb.velocity.y < 0);
+    }
+
+    private void StartDash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canDash && !dashed)
+        {
+            StartCoroutine(Dash());
+            dashed = true;
+        }
+
+        if (IsGrounded())
+        {
+            dashed = false;
+        }
+    }
+
+    private IEnumerator Dash()
+    {
+        isDashing = true;
+        canDash = false;
+        Animation.DashAnimation();
+        rb.gravityScale = 0;
+        rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+
+        yield return new WaitForSeconds(dashTime);
+        rb.gravityScale = 1;
+        isDashing = false;
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 }
