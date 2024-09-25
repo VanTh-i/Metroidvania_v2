@@ -18,6 +18,15 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferCounter;
     private bool doubleJump;
 
+    [Header("Player Dash")]
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashTime;
+    [SerializeField] private float dashCooldown;
+    private bool canDash = true;
+    private bool dashed;
+    private bool isDashing;
+
+
     [Header("Raycast check ground")]
     [SerializeField] private Transform groundCheckPoint;
     [SerializeField] private float groundCheckY;
@@ -32,8 +41,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
+        if (isDashing) return;
         Move();
         Jump();
+        StartDash();
     }
 
 
@@ -111,5 +122,35 @@ public class PlayerMovement : MonoBehaviour
 
         Animation.JumpAnimation(!IsGrounded() && rb.velocity.y > 0);
         Animation.FallAnimation(!IsGrounded() && rb.velocity.y < 0);
+    }
+
+    private void StartDash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canDash && !dashed)
+        {
+            StartCoroutine(Dash());
+            dashed = true;
+        }
+
+        if (IsGrounded())
+        {
+            dashed = false;
+        }
+    }
+
+    private IEnumerator Dash()
+    {
+        isDashing = true;
+        canDash = false;
+        Animation.DashAnimation();
+        rb.gravityScale = 0;
+        rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+
+        yield return new WaitForSeconds(dashTime);
+        rb.gravityScale = 1;
+        isDashing = false;
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 }

@@ -23,4 +23,8 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetBool("Fall", value);
     }
+    public void DashAnimation()
+    {
+        anim.SetTrigger("Dash");
+    }
 }
