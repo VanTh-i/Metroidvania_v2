@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpBufferTime;
     private float jumpBufferCounter;
     private bool doubleJump;
+    private int airJumpCounter = 0;
+    [SerializeField]private int maxAirJump;
+    
 
     [Header("Player Dash")]
     [SerializeField] private float dashSpeed;
@@ -91,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded())
         {
             coyoteTimeCounter = coyoteTime;
+            airJumpCounter = 0;
         }
         else
         {
@@ -111,6 +115,12 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             coyoteTimeCounter = 0f;
+        }
+        else if (!IsGrounded() && airJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space)){
+             //doubleJump = true;
+            airJumpCounter++;
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+
         }
 
         //khi nha phim space player se roi xuong, tao cam giac jump tot hon
