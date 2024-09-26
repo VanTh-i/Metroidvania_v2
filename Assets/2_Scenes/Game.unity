@@ -471,6 +471,7 @@ MonoBehaviour:
   jumpForce: 8
   coyoteTime: 0.25
   jumpBufferTime: 0.2
+  maxAirJump: 1
   dashSpeed: 20
   dashTime: 0.2
   dashCooldown: 0.35
