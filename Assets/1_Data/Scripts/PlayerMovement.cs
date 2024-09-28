@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private PlayerAnimation Animation;
+    private Player player;
 
     [SerializeField] private float speed;
     private float xAxis;
@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Animation = GetComponentInChildren<PlayerAnimation>();
+        player = GetComponent<Player>();
     }
 
     private void Update()
@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.velocity = new Vector2(speed * xAxis, rb.velocity.y);
         //chay animation run khi o tren mat dat va player di chuyen
-        Animation.RunAnimation(IsGrounded() && rb.velocity.x != 0);
+        player.Animation.RunAnimation(IsGrounded() && rb.velocity.x != 0);
     }
 
     public bool IsGrounded()
@@ -132,8 +132,8 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
-        Animation.JumpAnimation(!IsGrounded() && rb.velocity.y > 0);
-        Animation.FallAnimation(!IsGrounded() && rb.velocity.y < 0);
+        player.Animation.JumpAnimation(!IsGrounded() && rb.velocity.y > 0);
+        player.Animation.FallAnimation(!IsGrounded() && rb.velocity.y < 0);
     }
 
     private void StartDash()
@@ -154,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isDashing = true;
         canDash = false;
-        Animation.DashAnimation();
+        player.Animation.DashAnimation();
         rb.gravityScale = 0;
         rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
 
