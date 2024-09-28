@@ -16,10 +16,10 @@ public class PlayerMovement : MonoBehaviour
     private float coyoteTimeCounter;
     [SerializeField] private float jumpBufferTime;
     private float jumpBufferCounter;
-    private bool doubleJump;
+    //private bool doubleJump;
     private int airJumpCounter = 0;
-    [SerializeField]private int maxAirJump;
-    
+    private int maxAirJump = 1;
+
 
     [Header("Player Dash")]
     [SerializeField] private float dashSpeed;
@@ -109,15 +109,17 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpBufferCounter -= Time.deltaTime;
         }
-
+        //
         //jump
         if (coyoteTimeCounter > 0f && jumpBufferCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             coyoteTimeCounter = 0f;
         }
-        else if (!IsGrounded() && airJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space)){
-             //doubleJump = true;
+        //double jump
+        else if (!IsGrounded() && airJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space))
+        {
+            //doubleJump = true;
             airJumpCounter++;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 
