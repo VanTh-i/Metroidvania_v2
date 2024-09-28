@@ -246,7 +246,7 @@ Transform:
   m_GameObject: {fileID: 233049487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.6, y: -1.16, z: 0}
+  m_LocalPosition: {x: 5.6, y: -0.37, z: 0}
   m_LocalScale: {x: -6.67, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -403,7 +403,9 @@ GameObject:
   - component: {fileID: 1261532888}
   - component: {fileID: 1261532886}
   - component: {fileID: 1261532890}
+  - component: {fileID: 1261532892}
   - component: {fileID: 1261532889}
+  - component: {fileID: 1261532891}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -471,7 +473,6 @@ MonoBehaviour:
   jumpForce: 8
   coyoteTime: 0.25
   jumpBufferTime: 0.2
-  maxAirJump: 1
   dashSpeed: 20
   dashTime: 0.2
   dashCooldown: 0.35
@@ -525,6 +526,31 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6782985, y: 1.4238622}
   m_EdgeRadius: 0
+--- !u!114 &1261532891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261532884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aa059e155858634ca430c89d960da53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenAttack: 0.8
+--- !u!114 &1261532892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261532884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3872fefde599d334c8d49aadfb5e7fe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1313818721
 GameObject:
   m_ObjectHideFlags: 0
