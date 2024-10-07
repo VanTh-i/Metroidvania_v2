@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : Player
 {
     private Rigidbody2D rb;
-    private Player player;
 
     [SerializeField] private float speed;
-    private float xAxis;
 
     [Header("Jump Mechanic")]
     [SerializeField] private float jumpForce;
@@ -35,35 +33,32 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckY;
     [SerializeField] private LayerMask whatIsGround;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
-        player = GetComponent<Player>();
     }
 
-    private void Update()
+    protected override void Update()
     {
-        GetInput();
+        base.Update();
+
         if (isDashing) return;
         Move();
         Jump();
         StartDash();
     }
 
-
-    private void GetInput()
-    {
-        xAxis = Input.GetAxisRaw("Horizontal");
-    }
-
     private void Flip()
     {
         if (xAxis < 0)
         {
+            playerState.IsLookingRight = false;
             transform.localScale = new Vector2(-1, transform.localScale.y);
         }
         else if (xAxis > 0)
         {
+            playerState.IsLookingRight = true;
             transform.localScale = new Vector2(1, transform.localScale.y);
         }
     }
@@ -74,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.velocity = new Vector2(speed * xAxis, rb.velocity.y);
         //chay animation run khi o tren mat dat va player di chuyen
-        player.Animation.RunAnimation(IsGrounded() && rb.velocity.x != 0);
+        Animation.RunAnimation(IsGrounded() && rb.velocity.x != 0);
     }
 
     public bool IsGrounded()
@@ -82,9 +77,16 @@ public class PlayerMovement : MonoBehaviour
         //kiem tra xem player co dang dung tren mat dat hay la khong
         if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckY, whatIsGround))
         {
+            playerState.IsInGround = true;
             return true;
         }
-        else return false;
+        else
+        {
+            playerState.IsInGround = false;
+            return false;
+
+        }
+
     }
 
     private void Jump()
@@ -132,8 +134,8 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimeCounter = 0f;
         }
 
-        player.Animation.JumpAnimation(!IsGrounded() && rb.velocity.y > 0);
-        player.Animation.FallAnimation(!IsGrounded() && rb.velocity.y < 0);
+        Animation.JumpAnimation(!IsGrounded() && rb.velocity.y > 0);
+        Animation.FallAnimation(!IsGrounded() && rb.velocity.y < 0);
     }
 
     private void StartDash()
@@ -154,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isDashing = true;
         canDash = false;
-        player.Animation.DashAnimation();
+        Animation.DashAnimation();
         rb.gravityScale = 0;
         rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
 
