@@ -4,10 +4,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    protected internal PlayerAnimation Animation;
+    protected PlayerAnimation Animation;
+    protected bool attacking;
+    protected float xAxis, yAxis;
+    public bool Grounded { get; set; }
 
-    private void Start()
+    protected virtual void Start()
     {
         Animation = GetComponentInChildren<PlayerAnimation>();
+    }
+    protected virtual void Update()
+    {
+        GetInput();
+    }
+
+    protected virtual void GetInput()
+    {
+        attacking = Input.GetKeyDown(KeyCode.Mouse0);
+        xAxis = Input.GetAxisRaw("Horizontal");
+        yAxis = Input.GetAxisRaw("Vertical");
     }
 }
