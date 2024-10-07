@@ -42,7 +42,6 @@ public class PlayerMovement : Player
     protected override void Update()
     {
         base.Update();
-        CheckPlayerIsInGround();
 
         if (isDashing) return;
         Move();
@@ -54,10 +53,12 @@ public class PlayerMovement : Player
     {
         if (xAxis < 0)
         {
+            playerState.IsLookingRight = false;
             transform.localScale = new Vector2(-1, transform.localScale.y);
         }
         else if (xAxis > 0)
         {
+            playerState.IsLookingRight = true;
             transform.localScale = new Vector2(1, transform.localScale.y);
         }
     }
@@ -76,18 +77,16 @@ public class PlayerMovement : Player
         //kiem tra xem player co dang dung tren mat dat hay la khong
         if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckY, whatIsGround))
         {
+            playerState.IsInGround = true;
             return true;
         }
-        else return false;
-    }
-
-    public void CheckPlayerIsInGround()
-    {
-        if (IsGrounded())
+        else
         {
-            Grounded = true;
+            playerState.IsInGround = false;
+            return false;
+
         }
-        else Grounded = false;
+
     }
 
     private void Jump()

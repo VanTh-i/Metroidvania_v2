@@ -465,9 +465,9 @@ GameObject:
   - component: {fileID: 1261532888}
   - component: {fileID: 1261532886}
   - component: {fileID: 1261532890}
-  - component: {fileID: 1261532892}
   - component: {fileID: 1261532889}
   - component: {fileID: 1261532891}
+  - component: {fileID: 1261532892}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -605,6 +605,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   timeBetweenAttack: 0.8
+  hitForce: 400
+  swordSlashPrefab: {fileID: 6012372041267091728, guid: 7308e3b82e719a049802ecb91b7ab79f, type: 3}
   sideAttackTransform: {fileID: 1438248443}
   downAttackTransform: {fileID: 419211385}
   upAttackTransform: {fileID: 112400837}
@@ -623,9 +625,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1261532884}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3872fefde599d334c8d49aadfb5e7fe9, type: 3}
+  m_Script: {fileID: 11500000, guid: 75177b76c6824084d8fdecfad8a66d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsLookingRight: 1
+  IsInGround: 0
 --- !u!1 &1313818721
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,7 +773,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 035dd111e7fef3f44abfe9643cce6fa5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -859,7 +863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5732be03f7dfdc349a0aebd949b9ad15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 5
+  health: 999
+  recoilLength: 1
 --- !u!1 &1806847086
 GameObject:
   m_ObjectHideFlags: 0

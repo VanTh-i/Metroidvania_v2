@@ -5,13 +5,15 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     protected PlayerAnimation Animation;
+    protected PlayerState playerState;
+
     protected bool attacking;
     protected float xAxis, yAxis;
-    public bool Grounded { get; set; }
 
     protected virtual void Start()
     {
         Animation = GetComponentInChildren<PlayerAnimation>();
+        playerState = GetComponent<PlayerState>();
     }
     protected virtual void Update()
     {
