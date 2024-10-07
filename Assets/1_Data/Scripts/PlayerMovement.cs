@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : Player
 {
-    private Rigidbody2D rb;
-
     [SerializeField] private float speed;
 
     [Header("Jump Mechanic")]
@@ -14,8 +12,7 @@ public class PlayerMovement : Player
     private float coyoteTimeCounter;
     [SerializeField] private float jumpBufferTime;
     private float jumpBufferCounter;
-    //private bool doubleJump;
-    private int airJumpCounter = 0;
+    //private int airJumpCounter = 0; remove variable, use in player state;
     private int maxAirJump = 1;
 
 
@@ -36,7 +33,6 @@ public class PlayerMovement : Player
     protected override void Start()
     {
         base.Start();
-        rb = GetComponent<Rigidbody2D>();
     }
 
     protected override void Update()
@@ -96,7 +92,7 @@ public class PlayerMovement : Player
         if (IsGrounded())
         {
             coyoteTimeCounter = coyoteTime;
-            airJumpCounter = 0;
+            playerState.AirJumpCounter = 0;
         }
         else
         {
@@ -119,10 +115,10 @@ public class PlayerMovement : Player
             coyoteTimeCounter = 0f;
         }
         //double jump
-        else if (!IsGrounded() && airJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space))
+        else if (!IsGrounded() && playerState.AirJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space))
         {
             //doubleJump = true;
-            airJumpCounter++;
+            playerState.AirJumpCounter++;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 
         }

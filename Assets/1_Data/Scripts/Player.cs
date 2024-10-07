@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    protected Rigidbody2D rb;
     protected PlayerAnimation Animation;
     protected PlayerState playerState;
 
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
 
     protected virtual void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         Animation = GetComponentInChildren<PlayerAnimation>();
         playerState = GetComponent<PlayerState>();
     }
