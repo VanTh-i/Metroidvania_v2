@@ -8,9 +8,9 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private float health;
     [SerializeField] private float recoilLength;
-    //[SerializeField] private float recoilFactor;
     float recoilTimer;
     private bool isRecoiling = false;
+    [SerializeField] private bool canRecoil;
 
     private void Start()
     {
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
     public void EnemyTakeDamage(float _damage, float _hitForce, Vector2 _hitDirection)
     {
         health -= _damage;
-        if (!isRecoiling)
+        if (!isRecoiling && canRecoil)
         {
             rb.AddForce(-_hitForce * _hitDirection);
         }
