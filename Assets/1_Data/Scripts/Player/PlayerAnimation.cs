@@ -31,4 +31,9 @@ public class PlayerAnimation : MonoBehaviour
     {
         anim.SetTrigger("Attack");
     }
+
+    public void WallSlidingAnimation(bool value)
+    {
+        anim.SetBool("Sliding", value);
+    }
 }

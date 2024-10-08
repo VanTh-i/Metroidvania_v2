@@ -32,8 +32,9 @@ public class PlayerCombat : Player
     protected override void Update()
     {
         base.Update();
-        Attack();
         Recoil();
+        if (playerState.IsWallSliding) return;
+        Attack();
     }
     private void Attack()
     {
@@ -87,7 +88,7 @@ public class PlayerCombat : Player
     private void SlashEffect(GameObject _slashEffect, int _effectAngle, Transform _acttackTransform)
     {
         _slashEffect = Instantiate(_slashEffect, _acttackTransform);
-        if (playerState.IsLookingRight)
+        if (playerState.IsFacingRight)
         {
             _slashEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, _effectAngle);
 
@@ -107,7 +108,7 @@ public class PlayerCombat : Player
     {
         if (playerState.recoilingX)
         {
-            if (playerState.IsLookingRight)
+            if (playerState.IsFacingRight)
             {
                 rb.velocity = new Vector2(-recoilXSpeed, 0);
             }
