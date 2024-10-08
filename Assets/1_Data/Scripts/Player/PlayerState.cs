@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour
 {
-    public bool IsLookingRight = true;
+    public bool IsFacingRight;
     public bool IsInGround;
     public bool IsWallSliding;
 

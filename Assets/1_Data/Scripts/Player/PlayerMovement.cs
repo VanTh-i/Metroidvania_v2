@@ -65,12 +65,12 @@ public class PlayerMovement : Player
     {
         if (xAxis < 0)
         {
-            playerState.IsLookingRight = false;
+            playerState.IsFacingRight = false;
             transform.localScale = new Vector2(-1, transform.localScale.y);
         }
         else if (xAxis > 0)
         {
-            playerState.IsLookingRight = true;
+            playerState.IsFacingRight = true;
             transform.localScale = new Vector2(1, transform.localScale.y);
         }
     }
