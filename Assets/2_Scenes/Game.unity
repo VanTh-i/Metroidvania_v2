@@ -810,8 +810,9 @@ GameObject:
   - component: {fileID: 1181250068}
   - component: {fileID: 1181250067}
   - component: {fileID: 1181250066}
-  - component: {fileID: 1181250069}
   - component: {fileID: 1181250070}
+  - component: {fileID: 1181250071}
+  - component: {fileID: 1181250069}
   m_Layer: 0
   m_Name: Player test
   m_TagString: Untagged
@@ -928,6 +929,7 @@ MonoBehaviour:
   recoilingX: 0
   recoilingY: 0
   AirJumpCounter: 0
+  GravityScale: 0
 --- !u!114 &1181250070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -949,6 +951,35 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &1181250071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181250062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aa059e155858634ca430c89d960da53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  timeBetweenAttack: 0.6
+  swordSlashPrefab: {fileID: 6012372041267091728, guid: 7308e3b82e719a049802ecb91b7ab79f, type: 3}
+  sideAttackTransform: {fileID: 2129265792}
+  downAttackTransform: {fileID: 194711765}
+  upAttackTransform: {fileID: 269679189}
+  sideAttackArea: 1
+  downAttackArea: 1
+  upAttackArea: 1
+  attackable:
+    serializedVersion: 2
+    m_Bits: 128
+  hitForce: 300
+  recoilXSteps: 10
+  recoilYSteps: 10
+  recoilXSpeed: 5
+  recoilYSpeed: 10
 --- !u!1 &1205422062
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1037,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.4428978, g: 0.735849, b: 0.48130405, a: 1}
   m_FlipX: 0
@@ -1221,6 +1252,7 @@ MonoBehaviour:
   recoilingX: 0
   recoilingY: 0
   AirJumpCounter: 0
+  GravityScale: 0
 --- !u!1 &1313818721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,7 +1828,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.4428978, g: 0.735849, b: 0.48130405, a: 1}
   m_FlipX: 0
@@ -2010,7 +2042,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.4428978, g: 0.735849, b: 0.48130405, a: 1}
   m_FlipX: 0

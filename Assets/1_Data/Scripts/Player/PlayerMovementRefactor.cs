@@ -14,7 +14,7 @@ public class PlayerMovementRefactor : Player
     private bool isJumping;
     private bool isWallJumping;
     private bool isDashing;
-    private bool isSliding;
+    //private bool isSliding; call in player state
 
     //Timers
     private float lastOnGroundTime;
@@ -45,12 +45,12 @@ public class PlayerMovementRefactor : Player
     #region LAYER CHECK PARAMETERS
     [Header("Layer Checks Point")]
     [SerializeField] private Transform groundCheckPoint;
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.49f, 0.03f);
+    [SerializeField] private Vector2 groundCheckSize;
 
     [Space(5)]
     [SerializeField] private Transform frontWallCheckPoint;
     [SerializeField] private Transform backWallCheckPoint;
-    [SerializeField] private Vector2 wallCheckSize = new Vector2(0.5f, 1f);
+    [SerializeField] private Vector2 wallCheckSize;
     #endregion
 
     #region LAYERS & TAGS
@@ -62,6 +62,7 @@ public class PlayerMovementRefactor : Player
     {
         base.Start();
         SetGravityScale(Data.gravityScale);
+        playerState.GravityScale = Data.gravityScale;
         playerState.IsFacingRight = true;
     }
 
@@ -103,10 +104,9 @@ public class PlayerMovementRefactor : Player
         if (!isDashing && !isJumping)
         {
             //Ground Check
-            if (Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0 , groundLayer) && !isJumping)//checks if set box overlaps with ground
+            if (Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundLayer) && !isJumping)//checks if set box overlaps with ground
             {
                 lastOnGroundTime = Data.coyoteTime;
-                playerState.IsInGround = true;
             }
 
             //Right Wall Check
@@ -124,6 +124,15 @@ public class PlayerMovementRefactor : Player
             }
 
             lastOnWallTime = MathF.Max(lastOnWallLeftTime, lastOnWallRightTime);
+        }
+
+        if (Physics2D.OverlapBox(groundCheckPoint.position, groundCheckSize, 0, groundLayer))
+        {
+            playerState.IsInGround = true;
+        }
+        else
+        {
+            playerState.IsInGround = false;
         }
         #endregion
 
@@ -201,15 +210,15 @@ public class PlayerMovementRefactor : Player
 
         #region SLIDE CHECKS
         if (CanSlide() && ((lastOnWallLeftTime > 0 && xAxis < 0) || (lastOnWallRightTime > 0 && xAxis > 0)))
-            isSliding = true;
+            playerState.IsWallSliding = true;
         else
-            isSliding = false;
+            playerState.IsWallSliding = false;
         #endregion
 
         #region GRAVITY
         if (!isDashAttacking) //dasing = failed
         {
-            if (isSliding)
+            if (playerState.IsWallSliding)
             {
                 SetGravityScale(0);
             }
@@ -223,7 +232,7 @@ public class PlayerMovementRefactor : Player
                 SetGravityScale(Data.gravityScale * Data.jumpCutGravityMult);
                 rb.velocity = new Vector2(rb.velocity.x, MathF.Max(rb.velocity.y, -Data.maxFallSpeed));
             }
-            else if ((isJumping || isWallJumping || isJumpFalling) && MathF.Abs(rb.velocity.y) < Data.jumpHangTimeThreshold )
+            else if ((isJumping || isWallJumping || isJumpFalling) && MathF.Abs(rb.velocity.y) < Data.jumpHangTimeThreshold)
             {
                 SetGravityScale(Data.gravityScale * Data.jumpHangGravityMult);
             }
@@ -235,13 +244,20 @@ public class PlayerMovementRefactor : Player
             }
             else
             {
-				SetGravityScale(Data.gravityScale); //Default gravity if standing on a platform
+                SetGravityScale(Data.gravityScale); //Default gravity if standing on a platform
             }
         }
         else
         {
-			SetGravityScale(0); //No gravity when dashing
+            SetGravityScale(0); //No gravity when dashing
         }
+        #endregion
+
+        #region ANIMATION
+        Animation.RunAnimation(playerState.IsInGround && rb.velocity.x != 0);
+        Animation.JumpAnimation(!playerState.IsInGround && rb.velocity.y > 0);
+        Animation.FallAnimation(!playerState.IsInGround && rb.velocity.y < 0);
+        Animation.WallSlidingAnimation(playerState.IsWallSliding);
         #endregion
     }
 
@@ -261,7 +277,7 @@ public class PlayerMovementRefactor : Player
         }
 
         //Handle Slide
-        if (isSliding)
+        if (playerState.IsWallSliding)
             Slide();
     }
 
@@ -330,7 +346,7 @@ public class PlayerMovementRefactor : Player
             accelRate = 0;
         }
 
-        float speedDif = targetSpeed -rb.velocity.x;
+        float speedDif = targetSpeed - rb.velocity.x;
         float movement = speedDif * accelRate;
 
         rb.AddForce(movement * Vector2.right, ForceMode2D.Force);
@@ -410,7 +426,7 @@ public class PlayerMovementRefactor : Player
 
         while (Time.time - startTime <= Data.dashEndTime)
         {
-			yield return null;
+            yield return null;
         }
 
         isDashing = false;
