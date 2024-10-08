@@ -32,8 +32,9 @@ public class PlayerCombat : Player
     protected override void Update()
     {
         base.Update();
-        Attack();
         Recoil();
+        if (playerState.IsWallSliding) return;
+        Attack();
     }
     private void Attack()
     {

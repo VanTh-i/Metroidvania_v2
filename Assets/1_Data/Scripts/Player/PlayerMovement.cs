@@ -15,6 +15,11 @@ public class PlayerMovement : Player
     //private int airJumpCounter = 0; remove variable, use in player state;
     private int maxAirJump = 1;
 
+    [Header("Wall Jump")]
+    [SerializeField] private Transform wallCheckPoint;
+    [SerializeField] private float groundCheckX;
+    [SerializeField] private float wallSlidingSpeed;
+
 
     [Header("Player Dash")]
     [SerializeField] private float dashSpeed;
@@ -43,6 +48,17 @@ public class PlayerMovement : Player
         Move();
         Jump();
         StartDash();
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsSliding())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+            
+        }
+
+        Animation.WallSlidingAnimation(IsSliding());
     }
 
     private void Flip()
@@ -85,6 +101,35 @@ public class PlayerMovement : Player
 
     }
 
+    public bool IsWalled()
+    {
+        //kiem tra xem player co dang dung tren mat dat hay la khong
+        if (Physics2D.Raycast(wallCheckPoint.position, Vector2.right, groundCheckX, whatIsGround))
+        {
+            playerState.IsWallSliding = true;
+            return true;
+        }
+        else
+        {
+            playerState.IsWallSliding = false;
+            return false;
+
+        }
+
+    }
+
+    public bool IsSliding()
+    {
+        if (IsWalled() && !IsGrounded() && xAxis != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void Jump()
     {
         /*CoyoteTimeCounter se bi tru lien tuc khi khong o tren mat dat, khi roi khoi mat
@@ -115,7 +160,7 @@ public class PlayerMovement : Player
             coyoteTimeCounter = 0f;
         }
         //double jump
-        else if (!IsGrounded() && playerState.AirJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space))
+        else if (!IsGrounded() && playerState.AirJumpCounter < maxAirJump && Input.GetKeyDown(KeyCode.Space) && playerState.CanDoubleJump)
         {
             //doubleJump = true;
             playerState.AirJumpCounter++;
