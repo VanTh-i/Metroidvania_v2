@@ -110,11 +110,16 @@ public class PlayerCombat : Player
         {
             if (playerState.IsFacingRight)
             {
-                rb.velocity = new Vector2(-recoilXSpeed, 0);
+                //rb.velocity = new Vector2(-recoilXSpeed, 0);
+                //rb.AddForce(-recoilXSpeed * Vector2.right, ForceMode2D.Impulse);
+                transform.Translate(-recoilXSpeed * Vector2.right * Time.deltaTime);
             }
             else
             {
-                rb.velocity = new Vector2(recoilXSpeed, 0);
+                //rb.velocity = new Vector2(recoilXSpeed, 0);
+                //rb.AddForce(recoilXSpeed * Vector2.right, ForceMode2D.Impulse);
+                transform.Translate(recoilXSpeed * Vector2.right * Time.deltaTime);
+
             }
         }
 
@@ -123,18 +128,23 @@ public class PlayerCombat : Player
             rb.gravityScale = 0;
             if (yAxis < 0)
             {
-                rb.velocity = new Vector2(rb.velocity.x, recoilYSpeed);
+                //rb.velocity = new Vector2(rb.velocity.x, recoilYSpeed);
+                transform.Translate(recoilYSpeed * Vector2.up * Time.deltaTime);
+
             }
             else
             {
-                rb.velocity = new Vector2(rb.velocity.x, -recoilYSpeed);
+                //rb.velocity = new Vector2(rb.velocity.x, -recoilYSpeed);
+                transform.Translate(-recoilYSpeed * Vector2.up * Time.deltaTime);
+
             }
 
             playerState.AirJumpCounter = 0; // reset double jump when Recoil in air
         }
         else
         {
-            rb.gravityScale = 1;
+            rb.gravityScale = playerState.GravityScale;
+            //rb.gravityScale = 1;
         }
 
         //stop recoil

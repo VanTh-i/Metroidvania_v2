@@ -10,7 +10,8 @@ public class PlayerState : MonoBehaviour
 
     public bool CanDoubleJump;
 
-    public bool recoilingX, recoilingY;
+    [HideInInspector] public bool recoilingX, recoilingY;
 
-    public int AirJumpCounter = 0;
+    [HideInInspector] public int AirJumpCounter = 0;
+    [HideInInspector] public float GravityScale;
 }
